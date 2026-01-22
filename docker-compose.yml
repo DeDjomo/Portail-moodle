@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: portal_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: portal_db
+      MYSQL_USER: portal_user
+      MYSQL_PASSWORD: portal_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/init.sql
+
+  backend:
+    build: ./backend
+    container_name: portal_backend
+    restart: unless-stopped
+    ports:
+      - "9080:9080"
+    depends_on:
+      - db
+
+volumes:
+  db_data:
