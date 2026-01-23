@@ -44,4 +44,25 @@ public class MediaController {
     public void deleteMedia(@PathVariable Long id) {
         service.deleteMedia(id);
     }
+
+    @GetMapping("/media")
+    @Operation(summary = "Lister tous les médias")
+    public List<MediaDto> getAllMedia() {
+        return service.getAllMedia();
+    }
+
+    @GetMapping("/media/{id}")
+    @Operation(summary = "Obtenir un média par ID")
+    public MediaDto getMediaById(@PathVariable Long id) {
+        return service.getMediaById(id);
+    }
+
+    @PutMapping("/media/{id}")
+    @Operation(summary = "Modifier un média (altText, estPrincipal)")
+    public MediaDto updateMedia(
+            @PathVariable Long id,
+            @RequestParam(required = false) String altText,
+            @RequestParam(required = false) Boolean estPrincipal) {
+        return service.updateMedia(id, altText, estPrincipal);
+    }
 }

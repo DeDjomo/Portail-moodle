@@ -96,4 +96,31 @@ public class MediaService {
                 entity.getEstPrincipal(),
                 entity.getCreatedAt());
     }
+
+    public List<MediaDto> getAllMedia() {
+        return mediaRepository.findAll().stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    public MediaDto getMediaById(Long id) {
+        return mediaRepository.findById(id)
+                .map(this::mapToDto)
+                .orElseThrow(() -> new RuntimeException("Media not found"));
+    }
+
+    @Transactional
+    public MediaDto updateMedia(Long id, String altText, Boolean estPrincipal) {
+        Media media = mediaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Media not found"));
+
+        if (altText != null) {
+            media.setAltText(altText);
+        }
+        if (estPrincipal != null) {
+            media.setEstPrincipal(estPrincipal);
+        }
+
+        return mapToDto(mediaRepository.save(media));
+    }
 }
