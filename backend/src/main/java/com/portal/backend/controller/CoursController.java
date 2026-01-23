@@ -81,4 +81,22 @@ public class CoursController {
     public List<CoursDto> getAllCours() {
         return service.getAllCours();
     }
+
+    @GetMapping("/admin/{adminId}/top")
+    @Operation(summary = "Top 5 cours les plus vus d'un administrateur")
+    public List<CoursDto> getTop5CoursesByAdmin(@PathVariable Long adminId) {
+        return service.getTop5CoursesByAdmin(adminId);
+    }
+
+    @GetMapping("/sorted-by-views")
+    @Operation(summary = "Tous les cours triés par nombre de vues décroissant")
+    public List<CoursDto> getAllCoursesSortedByViews() {
+        return service.getAllCoursesSortedByViews();
+    }
+
+    @GetMapping("/{id}/history")
+    @Operation(summary = "Historique des modifications d'un cours (retourne le cours avec sa date de dernière modification)")
+    public CoursDto getCourseHistory(@PathVariable Long id) {
+        return service.getCours(id);
+    }
 }

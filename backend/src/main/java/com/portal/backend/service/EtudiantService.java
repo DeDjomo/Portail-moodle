@@ -18,136 +18,142 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EtudiantService {
 
-    private final EtudiantRepository etudiantRepository;
-    private final CoursRepository coursRepository;
-    private final CoursService coursService; // Reuse mapping logic if possible or just map here
+        private final EtudiantRepository etudiantRepository;
+        private final CoursRepository coursRepository;
+        private final CoursService coursService; // Reuse mapping logic if possible or just map here
 
-    @Transactional
-    public EtudiantDto createEtudiant(EtudiantCreateRequest request) {
-        Etudiant etudiant = Etudiant.builder()
-                .nom(request.nom())
-                .prenom(request.prenom())
-                .email(request.email())
-                .filiere(request.filiere())
-                .niveau(request.niveau())
-                .telephone(request.telephone())
-                .build();
+        @Transactional
+        public EtudiantDto createEtudiant(EtudiantCreateRequest request) {
+                Etudiant etudiant = Etudiant.builder()
+                                .nom(request.nom())
+                                .prenom(request.prenom())
+                                .email(request.email())
+                                .filiere(request.filiere())
+                                .niveau(request.niveau())
+                                .telephone(request.telephone())
+                                .build();
 
-        return mapToDto(etudiantRepository.save(etudiant));
-    }
+                return mapToDto(etudiantRepository.save(etudiant));
+        }
 
-    @Transactional
-    public EtudiantDto updateEtudiant(Long id, EtudiantCreateRequest request) {
-        Etudiant etudiant = etudiantRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Etudiant not found"));
+        @Transactional
+        public EtudiantDto updateEtudiant(Long id, EtudiantCreateRequest request) {
+                Etudiant etudiant = etudiantRepository.findById(id)
+                                .orElseThrow(() -> new RuntimeException("Etudiant not found"));
 
-        etudiant.setNom(request.nom());
-        etudiant.setPrenom(request.prenom());
-        etudiant.setEmail(request.email());
-        etudiant.setFiliere(request.filiere());
-        etudiant.setNiveau(request.niveau());
-        etudiant.setTelephone(request.telephone());
+                etudiant.setNom(request.nom());
+                etudiant.setPrenom(request.prenom());
+                etudiant.setEmail(request.email());
+                etudiant.setFiliere(request.filiere());
+                etudiant.setNiveau(request.niveau());
+                etudiant.setTelephone(request.telephone());
 
-        return mapToDto(etudiantRepository.save(etudiant));
-    }
+                return mapToDto(etudiantRepository.save(etudiant));
+        }
 
-    @Transactional
-    public void deleteEtudiant(Long id) {
-        etudiantRepository.deleteById(id);
-    }
+        @Transactional
+        public void deleteEtudiant(Long id) {
+                etudiantRepository.deleteById(id);
+        }
 
-    public EtudiantDto getEtudiant(Long id) {
-        return etudiantRepository.findById(id)
-                .map(this::mapToDto)
-                .orElseThrow(() -> new RuntimeException("Etudiant not found"));
-    }
+        public EtudiantDto getEtudiant(Long id) {
+                return etudiantRepository.findById(id)
+                                .map(this::mapToDto)
+                                .orElseThrow(() -> new RuntimeException("Etudiant not found"));
+        }
 
-    public List<EtudiantDto> getAllEtudiants() {
-        return etudiantRepository.findAll().stream()
-                .map(this::mapToDto)
-                .collect(Collectors.toList());
-    }
+        public List<EtudiantDto> getAllEtudiants() {
+                return etudiantRepository.findAll().stream()
+                                .map(this::mapToDto)
+                                .collect(Collectors.toList());
+        }
 
-    @Transactional
-    public void enrollStudent(Long etudiantId, Long coursId) {
-        Etudiant etudiant = etudiantRepository.findById(etudiantId)
-                .orElseThrow(() -> new RuntimeException("Etudiant not found"));
-        Cours cours = coursRepository.findById(coursId)
-                .orElseThrow(() -> new RuntimeException("Cours not found"));
+        @Transactional
+        public void enrollStudent(Long etudiantId, Long coursId) {
+                Etudiant etudiant = etudiantRepository.findById(etudiantId)
+                                .orElseThrow(() -> new RuntimeException("Etudiant not found"));
+                Cours cours = coursRepository.findById(coursId)
+                                .orElseThrow(() -> new RuntimeException("Cours not found"));
 
-        etudiant.getCoursSuivis().add(cours);
-        etudiantRepository.save(etudiant);
-    }
+                etudiant.getCoursSuivis().add(cours);
+                etudiantRepository.save(etudiant);
 
-    public List<EtudiantDto> getStudentsForCourse(Long coursId) {
-        Cours cours = coursRepository.findById(coursId)
-                .orElseThrow(() -> new RuntimeException("Cours not found"));
-        return cours.getEtudiants().stream()
-                .map(this::mapToDto)
-                .collect(Collectors.toList());
-    }
+                // Auto-increment view count on enrollment
+                cours.setNombreVues(cours.getNombreVues() + 1);
+                coursRepository.save(cours);
+        }
 
-    public List<CoursDto> getCoursesForStudent(Long etudiantId) {
-        Etudiant etudiant = etudiantRepository.findById(etudiantId)
-                .orElseThrow(() -> new RuntimeException("Etudiant not found"));
+        public List<EtudiantDto> getStudentsForCourse(Long coursId) {
+                Cours cours = coursRepository.findById(coursId)
+                                .orElseThrow(() -> new RuntimeException("Cours not found"));
+                return cours.getEtudiants().stream()
+                                .map(this::mapToDto)
+                                .collect(Collectors.toList());
+        }
 
-        // We need to manually map Cours to CoursDto here or expose a mapper in
-        // CoursService.
-        // For simplicity, implementing a basic mapper here or fetching via ID through
-        // service if needed.
-        // A cleaner way is to use a shared mapper component, but I'll replicate the
-        // mapping for now or inject CoursService.
-        // Actually, CoursService is injected, let's use it if it has a public mapper...
-        // it doesn't.
-        // I will implement a private mapper here that matches CoursDto structure.
+        public List<CoursDto> getCoursesForStudent(Long etudiantId) {
+                Etudiant etudiant = etudiantRepository.findById(etudiantId)
+                                .orElseThrow(() -> new RuntimeException("Etudiant not found"));
 
-        return etudiant.getCoursSuivis().stream()
-                .map(this::mapToCoursDto)
-                .collect(Collectors.toList());
-    }
+                // We need to manually map Cours to CoursDto here or expose a mapper in
+                // CoursService.
+                // For simplicity, implementing a basic mapper here or fetching via ID through
+                // service if needed.
+                // A cleaner way is to use a shared mapper component, but I'll replicate the
+                // mapping for now or inject CoursService.
+                // Actually, CoursService is injected, let's use it if it has a public mapper...
+                // it doesn't.
+                // I will implement a private mapper here that matches CoursDto structure.
 
-    private EtudiantDto mapToDto(Etudiant entity) {
-        return new EtudiantDto(
-                entity.getId(),
-                entity.getNom(),
-                entity.getPrenom(),
-                entity.getEmail(),
-                entity.getFiliere(),
-                entity.getNiveau(),
-                entity.getTelephone(),
-                entity.getCreatedAt());
-    }
+                return etudiant.getCoursSuivis().stream()
+                                .map(this::mapToCoursDto)
+                                .collect(Collectors.toList());
+        }
 
-    private CoursDto mapToCoursDto(Cours entity) {
-        return new CoursDto(
-                entity.getId(),
-                entity.getTitre(),
-                entity.getSlug(),
-                entity.getSynopsisCourt(),
-                entity.getDescriptionComplete(),
-                entity.getObjectifsPedagogiques(),
-                entity.getPublicCible(),
-                entity.getPrerequis(),
-                entity.getDureeTotaleMinutes(),
-                entity.getNiveau(),
-                entity.getLangue(),
-                entity.getFormat(),
-                entity.getEstCertifiant(),
-                entity.getStatut(),
-                entity.getDatePublication(),
-                entity.getMetaTitle(),
-                entity.getMetaDescription(),
-                entity.getNombreVues(),
-                entity.getAdministrateur().getId(),
-                entity.getInstructeur().getId(),
-                entity.getInstructeur().getNomComplet(),
-                entity.getCategorie() != null ? entity.getCategorie().getId() : null,
-                entity.getCategorie() != null ? entity.getCategorie().getNom() : null,
-                entity.getMedia().stream().map(m -> new com.portal.backend.dto.MediaDto(
-                    m.getId(), m.getCours().getId(), m.getNomFichier(), m.getUrlPublique(),
-                    m.getType(), m.getTailleOctets(), m.getDureeSecondes(), m.getDimensions(),
-                    m.getAltText(), m.getEstPrincipal(), m.getCreatedAt()
-                )).collect(Collectors.toList()),
-                entity.getCreatedAt());
-    }
+        private EtudiantDto mapToDto(Etudiant entity) {
+                return new EtudiantDto(
+                                entity.getId(),
+                                entity.getNom(),
+                                entity.getPrenom(),
+                                entity.getEmail(),
+                                entity.getFiliere(),
+                                entity.getNiveau(),
+                                entity.getTelephone(),
+                                entity.getCreatedAt());
+        }
+
+        private CoursDto mapToCoursDto(Cours entity) {
+                return new CoursDto(
+                                entity.getId(),
+                                entity.getTitre(),
+                                entity.getSlug(),
+                                entity.getSynopsisCourt(),
+                                entity.getDescriptionComplete(),
+                                entity.getObjectifsPedagogiques(),
+                                entity.getPublicCible(),
+                                entity.getPrerequis(),
+                                entity.getDureeTotaleMinutes(),
+                                entity.getNiveau(),
+                                entity.getLangue(),
+                                entity.getFormat(),
+                                entity.getEstCertifiant(),
+                                entity.getStatut(),
+                                entity.getDatePublication(),
+                                entity.getMetaTitle(),
+                                entity.getMetaDescription(),
+                                entity.getNombreVues(),
+                                entity.getAdministrateur().getId(),
+                                entity.getInstructeur().getId(),
+                                entity.getInstructeur().getNomComplet(),
+                                entity.getCategorie() != null ? entity.getCategorie().getId() : null,
+                                entity.getCategorie() != null ? entity.getCategorie().getNom() : null,
+                                entity.getMedia().stream().map(m -> new com.portal.backend.dto.MediaDto(
+                                                m.getId(), m.getCours().getId(), m.getNomFichier(), m.getUrlPublique(),
+                                                m.getType(), m.getTailleOctets(), m.getDureeSecondes(),
+                                                m.getDimensions(),
+                                                m.getAltText(), m.getEstPrincipal(), m.getCreatedAt()))
+                                                .collect(Collectors.toList()),
+                                entity.getCreatedAt(),
+                                entity.getUpdatedAt());
+        }
 }

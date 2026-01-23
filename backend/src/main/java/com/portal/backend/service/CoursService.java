@@ -139,6 +139,18 @@ public class CoursService {
                 .collect(Collectors.toList());
     }
 
+    public List<CoursDto> getTop5CoursesByAdmin(Long adminId) {
+        return coursRepository.findTop5ByAdministrateurIdOrderByNombreVuesDesc(adminId).stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<CoursDto> getAllCoursesSortedByViews() {
+        return coursRepository.findAllByOrderByNombreVuesDesc().stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
     private CoursDto mapToDto(Cours entity) {
         return new CoursDto(
                 entity.getId(),
@@ -165,10 +177,10 @@ public class CoursService {
                 entity.getCategorie() != null ? entity.getCategorie().getId() : null,
                 entity.getCategorie() != null ? entity.getCategorie().getNom() : null,
                 entity.getMedia().stream().map(m -> new com.portal.backend.dto.MediaDto(
-                    m.getId(), m.getCours().getId(), m.getNomFichier(), m.getUrlPublique(),
-                    m.getType(), m.getTailleOctets(), m.getDureeSecondes(), m.getDimensions(),
-                    m.getAltText(), m.getEstPrincipal(), m.getCreatedAt()
-                )).collect(Collectors.toList()),
-                entity.getCreatedAt());
+                        m.getId(), m.getCours().getId(), m.getNomFichier(), m.getUrlPublique(),
+                        m.getType(), m.getTailleOctets(), m.getDureeSecondes(), m.getDimensions(),
+                        m.getAltText(), m.getEstPrincipal(), m.getCreatedAt())).collect(Collectors.toList()),
+                entity.getCreatedAt(),
+                entity.getUpdatedAt());
     }
 }

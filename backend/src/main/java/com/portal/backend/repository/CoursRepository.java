@@ -10,4 +10,8 @@ public interface CoursRepository extends JpaRepository<Cours, Long> {
     Optional<Cours> findBySlug(String slug);
 
     List<Cours> findByStatut(CourseStatus statut);
+
+    List<Cours> findTop5ByAdministrateurIdOrderByNombreVuesDesc(Long administrateurId);
+
+    List<Cours> findAllByOrderByNombreVuesDesc();
 }
