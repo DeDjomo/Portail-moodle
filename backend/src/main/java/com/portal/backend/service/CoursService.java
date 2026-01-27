@@ -139,6 +139,85 @@ public class CoursService {
                 .collect(Collectors.toList());
     }
 
+    // Statistics
+    public long countAllCours() {
+        return coursRepository.count();
+    }
+
+    public long countPublishedCours() {
+        return coursRepository.countByStatut(CourseStatus.PUBLIE);
+    }
+
+    public long countCoursByStatus(CourseStatus status) {
+        return coursRepository.countByStatut(status);
+    }
+
+    public long countCoursByCategory(Long categoryId) {
+        return coursRepository.countByCategorieId(categoryId);
+    }
+
+    // Filters for Admin
+    public List<CoursDto> getAdminCoursByStatus(Long adminId, CourseStatus status) {
+        return coursRepository.findByAdministrateurIdAndStatut(adminId, status).stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<CoursDto> getAdminCoursByCategory(Long adminId, Long categorieId) {
+        return coursRepository.findByAdministrateurIdAndCategorieId(adminId, categorieId).stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<CoursDto> getAdminCoursByNiveau(Long adminId, String niveau) {
+        return coursRepository.findByAdministrateurIdAndNiveau(adminId, niveau).stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<CoursDto> getAdminCoursByCertifiant(Long adminId, Boolean estCertifiant) {
+        return coursRepository.findByAdministrateurIdAndEstCertifiant(adminId, estCertifiant).stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<CoursDto> getAdminCoursByFormat(Long adminId, com.portal.backend.entity.CourseFormat format) {
+        return coursRepository.findByAdministrateurIdAndFormat(adminId, format).stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    // Global Filters
+    public List<CoursDto> getCoursByStatus(CourseStatus status) {
+        return coursRepository.findByStatut(status).stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<CoursDto> getCoursByCategory(Long categorieId) {
+        return coursRepository.findByCategorieId(categorieId).stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<CoursDto> getCoursByNiveau(String niveau) {
+        return coursRepository.findByNiveau(niveau).stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<CoursDto> getCoursByCertifiant(Boolean estCertifiant) {
+        return coursRepository.findByEstCertifiant(estCertifiant).stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<CoursDto> getCoursByFormat(com.portal.backend.entity.CourseFormat format) {
+        return coursRepository.findByFormat(format).stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
     public List<CoursDto> getTop5CoursesByAdmin(Long adminId) {
         return coursRepository.findTop5ByAdministrateurIdOrderByNombreVuesDesc(adminId).stream()
                 .map(this::mapToDto)
@@ -170,6 +249,7 @@ public class CoursService {
                 entity.getDatePublication(),
                 entity.getMetaTitle(),
                 entity.getMetaDescription(),
+                entity.getUrl(),
                 entity.getNombreVues(),
                 entity.getAdministrateur().getId(),
                 entity.getInstructeur().getId(),
@@ -177,7 +257,7 @@ public class CoursService {
                 entity.getCategorie() != null ? entity.getCategorie().getId() : null,
                 entity.getCategorie() != null ? entity.getCategorie().getNom() : null,
                 entity.getMedia().stream().map(m -> new com.portal.backend.dto.MediaDto(
-                        m.getId(), m.getCours().getId(), m.getNomFichier(), m.getUrlPublique(),
+                        m.getId(), m.getCours().getId(), m.getNomFichier(), m.getUrlPublique(), m.getUrlExterne(),
                         m.getType(), m.getTailleOctets(), m.getDureeSecondes(), m.getDimensions(),
                         m.getAltText(), m.getEstPrincipal(), m.getCreatedAt())).collect(Collectors.toList()),
                 entity.getCreatedAt(),

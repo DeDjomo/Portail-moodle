@@ -2,7 +2,10 @@ package com.portal.backend.controller;
 
 import com.portal.backend.dto.AdminCreateRequest;
 import com.portal.backend.dto.AdminDto;
+import com.portal.backend.dto.CoursDto;
 import com.portal.backend.service.AdminService;
+import com.portal.backend.service.CoursService;
+import com.portal.backend.service.EtudiantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,8 @@ import java.util.List;
 public class AdminController {
 
     private final AdminService service;
+    private final CoursService coursService;
+    private final EtudiantService etudiantService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
@@ -62,5 +67,44 @@ public class AdminController {
     @Operation(summary = "Lister tous les administrateurs")
     public List<AdminDto> getAllAdmins() {
         return service.getAllAdmins();
+    }
+
+    @GetMapping("/{id}/etudiants/month")
+    @Operation(summary = "Nombre d'étudiants inscrits ce mois-ci aux cours de l'admin")
+    public long countStudentsEnrolledInAdminCoursesThisMonth(@PathVariable Long id) {
+        return etudiantService.countStudentsEnrolledInAdminCoursesThisMonth(id);
+    }
+
+    // Admin Specific Course Filters
+    @GetMapping("/{id}/cours/statut/{status}")
+    @Operation(summary = "Cours de l'admin par statut")
+    public List<CoursDto> getAdminCoursByStatus(@PathVariable Long id,
+            @PathVariable com.portal.backend.entity.CourseStatus status) {
+        return coursService.getAdminCoursByStatus(id, status);
+    }
+
+    @GetMapping("/{id}/cours/categorie/{categorieId}")
+    @Operation(summary = "Cours de l'admin par catégorie")
+    public List<CoursDto> getAdminCoursByCategory(@PathVariable Long id, @PathVariable Long categorieId) {
+        return coursService.getAdminCoursByCategory(id, categorieId);
+    }
+
+    @GetMapping("/{id}/cours/niveau/{niveau}")
+    @Operation(summary = "Cours de l'admin par niveau")
+    public List<CoursDto> getAdminCoursByNiveau(@PathVariable Long id, @PathVariable String niveau) {
+        return coursService.getAdminCoursByNiveau(id, niveau);
+    }
+
+    @GetMapping("/{id}/cours/certifiant/{estCertifiant}")
+    @Operation(summary = "Cours de l'admin par certification")
+    public List<CoursDto> getAdminCoursByCertifiant(@PathVariable Long id, @PathVariable Boolean estCertifiant) {
+        return coursService.getAdminCoursByCertifiant(id, estCertifiant);
+    }
+
+    @GetMapping("/{id}/cours/format/{format}")
+    @Operation(summary = "Cours de l'admin par format")
+    public List<CoursDto> getAdminCoursByFormat(@PathVariable Long id,
+            @PathVariable com.portal.backend.entity.CourseFormat format) {
+        return coursService.getAdminCoursByFormat(id, format);
     }
 }

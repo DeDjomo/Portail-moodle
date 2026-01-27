@@ -90,6 +90,9 @@ public class Cours {
     @Column(name = "meta_description", length = 500)
     private String metaDescription;
 
+    @Column(name = "url", length = 500)
+    private String url;
+
     @ManyToMany(mappedBy = "coursSuivis")
     @Builder.Default
     private Set<Etudiant> etudiants = new HashSet<>();

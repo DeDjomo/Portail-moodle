@@ -14,4 +14,31 @@ public interface CoursRepository extends JpaRepository<Cours, Long> {
     List<Cours> findTop5ByAdministrateurIdOrderByNombreVuesDesc(Long administrateurId);
 
     List<Cours> findAllByOrderByNombreVuesDesc();
+
+    // Statistics
+    long countByStatut(CourseStatus statut);
+
+    long countByCategorieId(Long categorieId);
+
+    long countByAdministrateurId(Long administrateurId);
+
+    // Filters for Admin
+    List<Cours> findByAdministrateurIdAndStatut(Long administrateurId, CourseStatus statut);
+
+    List<Cours> findByAdministrateurIdAndCategorieId(Long administrateurId, Long categorieId);
+
+    List<Cours> findByAdministrateurIdAndNiveau(Long administrateurId, String niveau);
+
+    List<Cours> findByAdministrateurIdAndEstCertifiant(Long administrateurId, Boolean estCertifiant);
+
+    List<Cours> findByAdministrateurIdAndFormat(Long administrateurId, com.portal.backend.entity.CourseFormat format);
+
+    // Global Filters
+    List<Cours> findByCategorieId(Long categorieId);
+
+    List<Cours> findByNiveau(String niveau);
+
+    List<Cours> findByEstCertifiant(Boolean estCertifiant);
+
+    List<Cours> findByFormat(com.portal.backend.entity.CourseFormat format);
 }

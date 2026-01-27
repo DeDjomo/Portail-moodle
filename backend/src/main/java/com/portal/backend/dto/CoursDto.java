@@ -23,6 +23,7 @@ public record CoursDto(
                 LocalDateTime datePublication,
                 String metaTitle,
                 String metaDescription,
+                String url,
                 Long nombreVues,
                 Long administrateurId,
                 Long instructeurId,

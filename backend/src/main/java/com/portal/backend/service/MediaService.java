@@ -24,25 +24,43 @@ public class MediaService {
     private final FileStorageService fileStorageService;
 
     @Transactional
-    public MediaDto uploadMedia(Long coursId, MultipartFile file, Boolean estPrincipal, String altText) {
+    public MediaDto uploadMedia(Long coursId, MultipartFile file, String urlExterne, Boolean estPrincipal,
+            String altText) {
         Cours cours = coursRepository.findById(coursId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
-        String filename = fileStorageService.store(file);
-        String url = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/uploads/")
-                .path(filename)
-                .toUriString();
+        if (file == null && urlExterne == null) {
+            throw new RuntimeException("Either file or external URL must be provided");
+        }
 
-        MediaType type = determineMediaType(file.getContentType());
+        String filename = null;
+        String url = null;
+        MediaType type = null;
+        Long size = null;
+
+        if (file != null) {
+            filename = fileStorageService.store(file);
+            url = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/uploads/")
+                    .path(filename)
+                    .toUriString();
+            type = determineMediaType(file.getContentType());
+            size = file.getSize();
+        } else {
+            url = null; // No local URL
+            // Basic type inference or default
+            type = MediaType.VIDEO_MP4; // Default assumption for external links or passed param
+            // Ideally we should pass type param for external URL, but for now defaulting
+        }
 
         Media media = Media.builder()
                 .cours(cours)
-                .nomFichier(file.getOriginalFilename())
-                .cheminStockage(filename) // storing filename relative to uploads
+                .nomFichier(filename)
+                .cheminStockage(filename)
                 .urlPublique(url)
+                .urlExterne(urlExterne)
                 .type(type)
-                .tailleOctets(file.getSize())
+                .tailleOctets(size)
                 .estPrincipal(estPrincipal != null ? estPrincipal : false)
                 .altText(altText)
                 .build();
@@ -88,6 +106,7 @@ public class MediaService {
                 entity.getCours().getId(),
                 entity.getNomFichier(),
                 entity.getUrlPublique(),
+                entity.getUrlExterne(),
                 entity.getType(),
                 entity.getTailleOctets(),
                 entity.getDureeSecondes(),

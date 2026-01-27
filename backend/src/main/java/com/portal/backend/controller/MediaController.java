@@ -26,10 +26,11 @@ public class MediaController {
     @Operation(summary = "Ajouter un média à un cours")
     public MediaDto uploadMedia(
             @PathVariable Long coursId,
-            @RequestPart("file") MultipartFile file,
+            @RequestPart(value = "file", required = false) MultipartFile file,
+            @RequestParam(required = false) String urlExterne,
             @RequestParam(required = false, defaultValue = "false") Boolean estPrincipal,
             @RequestParam(required = false) String altText) {
-        return service.uploadMedia(coursId, file, estPrincipal, altText);
+        return service.uploadMedia(coursId, file, urlExterne, estPrincipal, altText);
     }
 
     @GetMapping("/cours/{coursId}/media")

@@ -95,8 +95,58 @@ public class CoursController {
     }
 
     @GetMapping("/{id}/history")
-    @Operation(summary = "Historique des modifications d'un cours (retourne le cours avec sa date de dernière modification)")
+    @Operation(summary = "Historique des modifications d'un cours")
     public CoursDto getCourseHistory(@PathVariable Long id) {
         return service.getCours(id);
+    }
+
+    // Statistics Endpoints
+    @GetMapping("/count")
+    @Operation(summary = "Nombre total de cours")
+    public long countAllCours() {
+        return service.countAllCours();
+    }
+
+    @GetMapping("/count/publie")
+    @Operation(summary = "Nombre de cours publiés")
+    public long countPublishedCours() {
+        return service.countPublishedCours();
+    }
+
+    @GetMapping("/count/statut/{status}")
+    @Operation(summary = "Nombre de cours par statut")
+    public long countCoursByStatus(@PathVariable CourseStatus status) {
+        return service.countCoursByStatus(status);
+    }
+
+    // Global Filter Endpoints
+    @GetMapping("/statut/{status}")
+    @Operation(summary = "Lister les cours par statut")
+    public List<CoursDto> getCoursByStatus(@PathVariable CourseStatus status) {
+        return service.getCoursByStatus(status);
+    }
+
+    @GetMapping("/categorie/{categorieId}")
+    @Operation(summary = "Lister les cours par catégorie")
+    public List<CoursDto> getCoursByCategory(@PathVariable Long categorieId) {
+        return service.getCoursByCategory(categorieId);
+    }
+
+    @GetMapping("/niveau/{niveau}")
+    @Operation(summary = "Lister les cours par niveau")
+    public List<CoursDto> getCoursByNiveau(@PathVariable String niveau) {
+        return service.getCoursByNiveau(niveau);
+    }
+
+    @GetMapping("/certifiant/{estCertifiant}")
+    @Operation(summary = "Lister les cours certifiants ou non")
+    public List<CoursDto> getCoursByCertifiant(@PathVariable Boolean estCertifiant) {
+        return service.getCoursByCertifiant(estCertifiant);
+    }
+
+    @GetMapping("/format/{format}")
+    @Operation(summary = "Lister les cours par format")
+    public List<CoursDto> getCoursByFormat(@PathVariable com.portal.backend.entity.CourseFormat format) {
+        return service.getCoursByFormat(format);
     }
 }

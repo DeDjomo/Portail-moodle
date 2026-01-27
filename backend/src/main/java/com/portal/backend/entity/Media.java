@@ -24,20 +24,22 @@ public class Media {
     @JoinColumn(name = "cours_id", nullable = false)
     private Cours cours;
 
-    @Column(name = "nom_fichier", nullable = false)
+    @Column(name = "nom_fichier")
     private String nomFichier;
 
-    @Column(name = "chemin_stockage", nullable = false, length = 500)
+    @Column(name = "chemin_stockage", length = 500)
     private String cheminStockage;
 
-    @Column(name = "url_publique", nullable = false, length = 500)
+    @Column(name = "url_publique", length = 500)
     private String urlPublique;
 
+    @Column(name = "url_externe", length = 500)
+    private String urlExterne;
+
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private MediaType type;
 
-    @Column(name = "taille_octets", nullable = false)
+    @Column(name = "taille_octets")
     private Long tailleOctets;
 
     @Column(name = "duree_secondes")

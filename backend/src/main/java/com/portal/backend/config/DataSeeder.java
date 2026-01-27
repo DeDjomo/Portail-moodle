@@ -77,7 +77,6 @@ public class DataSeeder implements CommandLineRunner {
                                 .nom("Développement")
                                 .slug(SlugUtil.toSlug("Développement"))
                                 .description("Cours de programmation")
-                                .ordreAffichage(1)
                                 .build();
                 categorieRepository.save(devCat);
 
@@ -86,7 +85,6 @@ public class DataSeeder implements CommandLineRunner {
                                 .slug(SlugUtil.toSlug("Java Spring"))
                                 .parent(devCat)
                                 .description("Framework Spring Boot")
-                                .ordreAffichage(1)
                                 .build();
                 categorieRepository.save(javaCat);
 
@@ -94,7 +92,6 @@ public class DataSeeder implements CommandLineRunner {
                                 .nom("Gestion de Projet")
                                 .slug(SlugUtil.toSlug("Gestion de Projet"))
                                 .description("Cours de management et gestion")
-                                .ordreAffichage(2)
                                 .build();
                 categorieRepository.save(gestionCat);
 

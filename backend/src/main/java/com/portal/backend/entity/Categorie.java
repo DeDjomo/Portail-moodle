@@ -33,16 +33,6 @@ public class Categorie {
     @Column(length = 500)
     private String description;
 
-    @Column(name = "icone_class")
-    private String iconeClass;
-
-    @Column(name = "couleur_hex")
-    private String couleurHex;
-
-    @Column(name = "ordre_affichage", nullable = false)
-    @Builder.Default
-    private Integer ordreAffichage = 0;
-
     @Column(name = "est_actif", nullable = false)
     @Builder.Default
     private Boolean estActif = true;

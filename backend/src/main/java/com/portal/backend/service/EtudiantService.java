@@ -20,7 +20,6 @@ public class EtudiantService {
 
         private final EtudiantRepository etudiantRepository;
         private final CoursRepository coursRepository;
-        private final CoursService coursService; // Reuse mapping logic if possible or just map here
 
         @Transactional
         public EtudiantDto createEtudiant(EtudiantCreateRequest request) {
@@ -66,6 +65,10 @@ public class EtudiantService {
                 return etudiantRepository.findAll().stream()
                                 .map(this::mapToDto)
                                 .collect(Collectors.toList());
+        }
+
+        public long countStudentsEnrolledInAdminCoursesThisMonth(Long adminId) {
+                return etudiantRepository.countStudentsEnrolledInAdminCoursesThisMonth(adminId);
         }
 
         @Transactional
@@ -141,6 +144,7 @@ public class EtudiantService {
                                 entity.getDatePublication(),
                                 entity.getMetaTitle(),
                                 entity.getMetaDescription(),
+                                entity.getUrl(),
                                 entity.getNombreVues(),
                                 entity.getAdministrateur().getId(),
                                 entity.getInstructeur().getId(),
@@ -149,6 +153,7 @@ public class EtudiantService {
                                 entity.getCategorie() != null ? entity.getCategorie().getNom() : null,
                                 entity.getMedia().stream().map(m -> new com.portal.backend.dto.MediaDto(
                                                 m.getId(), m.getCours().getId(), m.getNomFichier(), m.getUrlPublique(),
+                                                m.getUrlExterne(),
                                                 m.getType(), m.getTailleOctets(), m.getDureeSecondes(),
                                                 m.getDimensions(),
                                                 m.getAltText(), m.getEstPrincipal(), m.getCreatedAt()))

@@ -3,6 +3,7 @@ package com.portal.backend.controller;
 import com.portal.backend.dto.CategorieCreateRequest;
 import com.portal.backend.dto.CategorieDto;
 import com.portal.backend.service.CategorieService;
+import com.portal.backend.service.CoursService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.List;
 public class CategorieController {
 
     private final CategorieService service;
+    private final CoursService coursService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -49,5 +51,17 @@ public class CategorieController {
     @Operation(summary = "Lister toutes les catégories")
     public List<CategorieDto> getAllCategories() {
         return service.getAllCategories();
+    }
+
+    @GetMapping("/{id}/children/count")
+    @Operation(summary = "Nombre de sous-catégories")
+    public long countChildCategories(@PathVariable Long id) {
+        return service.countChildCategories(id);
+    }
+
+    @GetMapping("/{id}/cours/count")
+    @Operation(summary = "Nombre de cours dans une catégorie")
+    public long countCoursByCategory(@PathVariable Long id) {
+        return coursService.countCoursByCategory(id);
     }
 }

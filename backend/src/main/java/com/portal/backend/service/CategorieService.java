@@ -32,9 +32,6 @@ public class CategorieService {
                 .nom(request.nom())
                 .slug(slug)
                 .description(request.description())
-                .iconeClass(request.iconeClass())
-                .couleurHex(request.couleurHex())
-                .ordreAffichage(request.ordreAffichage() != null ? request.ordreAffichage() : 0)
                 .parent(parent)
                 .build();
 
@@ -54,11 +51,6 @@ public class CategorieService {
         categorie.setSlug(SlugUtil.toSlug(request.nom())); // Careful with existing slugs!
 
         categorie.setDescription(request.description());
-        categorie.setIconeClass(request.iconeClass());
-        categorie.setCouleurHex(request.couleurHex());
-        if (request.ordreAffichage() != null) {
-            categorie.setOrdreAffichage(request.ordreAffichage());
-        }
 
         if (request.parentId() != null) {
             Categorie parent = repository.findById(request.parentId())
@@ -88,6 +80,10 @@ public class CategorieService {
                 .collect(Collectors.toList());
     }
 
+    public long countChildCategories(Long parentId) {
+        return repository.countByParentId(parentId);
+    }
+
     private CategorieDto mapToDto(Categorie entity) {
         return new CategorieDto(
                 entity.getId(),
@@ -96,9 +92,6 @@ public class CategorieService {
                 entity.getNom(),
                 entity.getSlug(),
                 entity.getDescription(),
-                entity.getIconeClass(),
-                entity.getCouleurHex(),
-                entity.getOrdreAffichage(),
                 entity.getEstActif(),
                 entity.getCreatedAt());
     }
