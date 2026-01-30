@@ -45,9 +45,9 @@ public class AdminController {
     }
 
     @PatchMapping("/{id}/suspend")
-    @Operation(summary = "Suspendre un administrateur")
-    public void suspendAdmin(@PathVariable Long id) {
-        service.suspendAdmin(id);
+    @Operation(summary = "Suspendre/Activer un administrateur")
+    public AdminDto suspendAdmin(@PathVariable Long id) {
+        return service.suspendAdmin(id);
     }
 
     @DeleteMapping("/{id}")
@@ -106,5 +106,11 @@ public class AdminController {
     public List<CoursDto> getAdminCoursByFormat(@PathVariable Long id,
             @PathVariable com.portal.backend.entity.CourseFormat format) {
         return coursService.getAdminCoursByFormat(id, format);
+    }
+
+    @GetMapping("/stats/superadmin")
+    @Operation(summary = "Statistiques pour le Super Admin")
+    public com.portal.backend.dto.SuperAdminStatsDto getSuperAdminStats() {
+        return service.getSuperAdminStats();
     }
 }

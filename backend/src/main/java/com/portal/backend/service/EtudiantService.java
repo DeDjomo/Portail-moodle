@@ -23,10 +23,16 @@ public class EtudiantService {
 
         @Transactional
         public EtudiantDto createEtudiant(EtudiantCreateRequest request) {
+                // Check if email already exists
+                if (etudiantRepository.findByEmail(request.email()).isPresent()) {
+                        throw new RuntimeException("Un étudiant avec cet email existe déjà");
+                }
+
                 Etudiant etudiant = Etudiant.builder()
                                 .nom(request.nom())
                                 .prenom(request.prenom())
                                 .email(request.email())
+                                .passwordHash(com.portal.backend.util.PasswordUtil.hashPassword(request.password()))
                                 .filiere(request.filiere())
                                 .niveau(request.niveau())
                                 .telephone(request.telephone())
@@ -86,10 +92,10 @@ public class EtudiantService {
                 coursRepository.save(cours);
         }
 
+        @Transactional(readOnly = true)
         public List<EtudiantDto> getStudentsForCourse(Long coursId) {
-                Cours cours = coursRepository.findById(coursId)
-                                .orElseThrow(() -> new RuntimeException("Cours not found"));
-                return cours.getEtudiants().stream()
+                System.out.println("DEBUG: Fetching students for course (via Repo) " + coursId);
+                return etudiantRepository.findAllByCoursId(coursId).stream()
                                 .map(this::mapToDto)
                                 .collect(Collectors.toList());
         }
@@ -97,16 +103,6 @@ public class EtudiantService {
         public List<CoursDto> getCoursesForStudent(Long etudiantId) {
                 Etudiant etudiant = etudiantRepository.findById(etudiantId)
                                 .orElseThrow(() -> new RuntimeException("Etudiant not found"));
-
-                // We need to manually map Cours to CoursDto here or expose a mapper in
-                // CoursService.
-                // For simplicity, implementing a basic mapper here or fetching via ID through
-                // service if needed.
-                // A cleaner way is to use a shared mapper component, but I'll replicate the
-                // mapping for now or inject CoursService.
-                // Actually, CoursService is injected, let's use it if it has a public mapper...
-                // it doesn't.
-                // I will implement a private mapper here that matches CoursDto structure.
 
                 return etudiant.getCoursSuivis().stream()
                                 .map(this::mapToCoursDto)
@@ -146,6 +142,7 @@ public class EtudiantService {
                                 entity.getMetaDescription(),
                                 entity.getUrl(),
                                 entity.getNombreVues(),
+                                entity.getEtudiants().size(),
                                 entity.getAdministrateur().getId(),
                                 entity.getInstructeur().getId(),
                                 entity.getInstructeur().getNomComplet(),

@@ -32,6 +32,9 @@ public class Etudiant {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(name = "password_hash")
+    private String passwordHash;
+
     private String filiere;
     private String niveau;
     private String telephone;

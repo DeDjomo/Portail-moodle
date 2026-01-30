@@ -76,6 +76,12 @@ public class CoursController {
         return service.getCours(id);
     }
 
+    @GetMapping("/slug/{slug}")
+    @Operation(summary = "Obtenir un cours par Slug")
+    public CoursDto getCoursBySlug(@PathVariable String slug) {
+        return service.getCoursBySlug(slug);
+    }
+
     @GetMapping
     @Operation(summary = "Lister tous les cours")
     public List<CoursDto> getAllCours() {

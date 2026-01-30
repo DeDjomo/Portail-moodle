@@ -105,6 +105,9 @@ public class Cours {
     @Builder.Default
     private Long nombreVues = 0L;
 
+    @org.hibernate.annotations.Formula("(SELECT COUNT(*) FROM etudiant_cours ec WHERE ec.cours_id = id)")
+    private Integer nombreInscritsCalculated;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

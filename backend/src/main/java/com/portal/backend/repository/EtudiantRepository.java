@@ -17,4 +17,7 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
     long countStudentsEnrolledInAdminCoursesThisMonth(@Param("adminId") Long adminId);
 
     Optional<Etudiant> findByEmail(String email);
+
+    @Query("SELECT e FROM Etudiant e JOIN e.coursSuivis c WHERE c.id = :coursId")
+    java.util.List<Etudiant> findAllByCoursId(@Param("coursId") Long coursId);
 }

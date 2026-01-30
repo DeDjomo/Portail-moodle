@@ -3,6 +3,10 @@ package com.portal.backend.repository;
 import com.portal.backend.entity.Cours;
 import com.portal.backend.entity.CourseStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -41,4 +45,13 @@ public interface CoursRepository extends JpaRepository<Cours, Long> {
     List<Cours> findByEstCertifiant(Boolean estCertifiant);
 
     List<Cours> findByFormat(com.portal.backend.entity.CourseFormat format);
+
+    // Delete all courses belonging to an administrator
+    void deleteByAdministrateurId(Long administrateurId);
+
+    List<Cours> findByAdministrateurId(Long administrateurId);
+
+    @Modifying
+    @Query(value = "DELETE FROM etudiant_cours WHERE cours_id = :coursId", nativeQuery = true)
+    void detachStudentsFromCourse(@Param("coursId") Long coursId);
 }

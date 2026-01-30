@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CoursService {
 
     private final CoursRepository coursRepository;
@@ -129,6 +130,12 @@ public class CoursService {
 
     public CoursDto getCours(Long id) {
         return coursRepository.findById(id)
+                .map(this::mapToDto)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+    }
+
+    public CoursDto getCoursBySlug(String slug) {
+        return coursRepository.findBySlug(slug)
                 .map(this::mapToDto)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
     }
@@ -251,6 +258,7 @@ public class CoursService {
                 entity.getMetaDescription(),
                 entity.getUrl(),
                 entity.getNombreVues(),
+                entity.getNombreInscritsCalculated() != null ? entity.getNombreInscritsCalculated() : 0,
                 entity.getAdministrateur().getId(),
                 entity.getInstructeur().getId(),
                 entity.getInstructeur().getNomComplet(),

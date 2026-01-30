@@ -1,9 +1,12 @@
 package com.portal.backend.repository;
 
 import com.portal.backend.entity.Administrateur;
+import com.portal.backend.entity.AdminStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface AdministrateurRepository extends JpaRepository<Administrateur, Long> {
     Optional<Administrateur> findByEmail(String email);
+
+    long countByStatut(AdminStatus statut);
 }
