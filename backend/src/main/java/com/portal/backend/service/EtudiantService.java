@@ -20,6 +20,7 @@ public class EtudiantService {
 
         private final EtudiantRepository etudiantRepository;
         private final CoursRepository coursRepository;
+        private final EmailService emailService;
 
         @Transactional
         public EtudiantDto createEtudiant(EtudiantCreateRequest request) {
@@ -79,7 +80,35 @@ public class EtudiantService {
                                 .orElseThrow(() -> new RuntimeException("Cours not found"));
 
                 etudiant.getCoursSuivis().add(cours);
+                etudiant.getCoursSuivis().add(cours);
                 etudiantRepository.save(etudiant);
+
+                // Send email to course administrator
+                try {
+                        String adminEmail = cours.getAdministrateur().getEmail();
+                        String subject = "Nouvelle inscription au cours : " + cours.getTitre();
+                        String message = String.format(
+                                        "Bonjour %s,\n\n" +
+                                                        "Un nouvel étudiant vient de s'inscrire à votre cours \"%s\".\n\n"
+                                                        +
+                                                        "Détails de l'étudiant :\n" +
+                                                        "Nom : %s\n" +
+                                                        "Prénom : %s\n" +
+                                                        "Email : %s\n\n" +
+                                                        "Cordialement,\n" +
+                                                        "L'équipe Portail Moodle",
+                                        cours.getAdministrateur().getPrenom(),
+                                        cours.getTitre(),
+                                        etudiant.getNom(),
+                                        etudiant.getPrenom(),
+                                        etudiant.getEmail());
+
+                        emailService.sendSimpleMessage(adminEmail, subject, message);
+                } catch (Exception e) {
+                        // Log error but don't fail enrollment
+                        System.err.println("Failed to send enrollment email: " + e.getMessage());
+                        e.printStackTrace();
+                }
 
                 // Auto-increment view count on enrollment
                 cours.setNombreVues(cours.getNombreVues() + 1);
