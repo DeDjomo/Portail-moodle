@@ -46,6 +46,7 @@ public class DataSeeder implements CommandLineRunner {
                                 .passwordHash(PasswordUtil.hashPassword("supersecret"))
                                 .type(AdminType.SUPER_ADMIN)
                                 .statut(AdminStatus.ACTIF)
+                                .avatarUrl("https://ui-avatars.com/api/?name=Super+Admin&background=0D8ABC&color=fff")
                                 .build();
                 adminRepository.save(superAdmin);
 
@@ -57,6 +58,7 @@ public class DataSeeder implements CommandLineRunner {
                                 .passwordHash(PasswordUtil.hashPassword("password"))
                                 .type(AdminType.ADMIN_STANDARD)
                                 .statut(AdminStatus.ACTIF)
+                                .avatarUrl("https://ui-avatars.com/api/?name=John+Doe&background=0D8ABC&color=fff")
                                 .build();
                 adminRepository.save(adminJohn);
 
@@ -68,6 +70,7 @@ public class DataSeeder implements CommandLineRunner {
                                 .passwordHash(PasswordUtil.hashPassword("password"))
                                 .type(AdminType.ADMIN_STANDARD)
                                 .statut(AdminStatus.ACTIF)
+                                .avatarUrl("https://ui-avatars.com/api/?name=Marie+Nguemo&background=0D8ABC&color=fff")
                                 .build();
                 adminRepository.save(adminMarie);
 
@@ -79,6 +82,7 @@ public class DataSeeder implements CommandLineRunner {
                                 .passwordHash(PasswordUtil.hashPassword("password"))
                                 .type(AdminType.ADMIN_STANDARD)
                                 .statut(AdminStatus.SUSPENDU)
+                                .avatarUrl("https://ui-avatars.com/api/?name=Paul+Tchatat&background=0D8ABC&color=fff")
                                 .build();
                 adminRepository.save(adminPaul);
 
@@ -90,6 +94,7 @@ public class DataSeeder implements CommandLineRunner {
                                 .passwordHash(PasswordUtil.hashPassword("password"))
                                 .type(AdminType.ADMIN_STANDARD)
                                 .statut(AdminStatus.ACTIF)
+                                .avatarUrl("https://ui-avatars.com/api/?name=Sophie+Kamga&background=0D8ABC&color=fff")
                                 .build();
                 adminRepository.save(adminSophie);
 
@@ -100,6 +105,9 @@ public class DataSeeder implements CommandLineRunner {
                                 .organisation("University of Code")
                                 .biographieCourte("Passionné par le code propre.")
                                 .biographieComplete("Une longue carrière dans le développement logiciel...")
+                                .photoUrl("https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop")
+                                .siteWeb("https://professeur-x.dev")
+                                .linkedinUrl("https://linkedin.com/in/professeur-x")
                                 .build();
                 instructeurRepository.save(instProf);
 
@@ -109,6 +117,9 @@ public class DataSeeder implements CommandLineRunner {
                                 .organisation("AI Labs")
                                 .biographieCourte("Experte en Machine Learning.")
                                 .biographieComplete("Docteur en sciences des données avec 10 ans d'expérience...")
+                                .photoUrl("https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop")
+                                .siteWeb("https://marie-curie.ai")
+                                .linkedinUrl("https://linkedin.com/in/marie-curie")
                                 .build();
                 instructeurRepository.save(instMarie);
 
@@ -118,6 +129,9 @@ public class DataSeeder implements CommandLineRunner {
                                 .organisation("AWS Partner")
                                 .biographieCourte("Spécialiste des infrastructures cloud.")
                                 .biographieComplete("Certifié AWS Solutions Architect, expert DevOps...")
+                                .photoUrl("https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop")
+                                .siteWeb("https://albert-mbarga.cloud")
+                                .linkedinUrl("https://linkedin.com/in/albert-mbarga")
                                 .build();
                 instructeurRepository.save(instAlbert);
 
@@ -127,6 +141,9 @@ public class DataSeeder implements CommandLineRunner {
                                 .organisation("Design Studio Africa")
                                 .biographieCourte("Passionnée par le design centré utilisateur.")
                                 .biographieComplete("Designer senior avec un portfolio primé...")
+                                .photoUrl("https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop")
+                                .siteWeb("https://fatou-diallo.design")
+                                .linkedinUrl("https://linkedin.com/in/fatou-diallo")
                                 .build();
                 instructeurRepository.save(instFatou);
 
@@ -136,6 +153,9 @@ public class DataSeeder implements CommandLineRunner {
                                 .organisation("SecureNet Cameroun")
                                 .biographieCourte("Consultant en sécurité informatique.")
                                 .biographieComplete("Certifié CISSP, CEH, expert en pentesting...")
+                                .photoUrl("https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop")
+                                .siteWeb("https://olivier-nkeng.sec")
+                                .linkedinUrl("https://linkedin.com/in/olivier-nkeng")
                                 .build();
                 instructeurRepository.save(instOlivier);
 
@@ -201,7 +221,7 @@ public class DataSeeder implements CommandLineRunner {
                 // ========== COURS ==========
                 // Cours 1: Spring Boot (PUBLIE)
                 Cours coursJava = Cours.builder()
-                                .administrateur(adminJohn)
+                                .administrateur(adminMarie)
                                 .instructeur(instProf)
                                 .categorie(javaCat)
                                 .titre("Maîtriser Spring Boot")
@@ -221,6 +241,10 @@ public class DataSeeder implements CommandLineRunner {
                                 .statut(CourseStatus.PUBLIE)
                                 .datePublication(LocalDateTime.now().minusDays(30))
                                 .nombreVues(1250L)
+                                .metaTitle("Maîtriser Spring Boot - Formation complète Java")
+                                .metaDescription(
+                                                "Devenez un expert Spring Boot en apprenant à créer des API REST professionnelles de A à Z.")
+                                .url("https://moodle.portal.com/course/spring-boot")
                                 .build();
                 coursRepository.save(coursJava);
                 createMediaWithExternalUrl(coursJava,
@@ -229,7 +253,7 @@ public class DataSeeder implements CommandLineRunner {
 
                 // Cours 2: Gestion de Projet Agile (PUBLIE)
                 Cours coursGestion = Cours.builder()
-                                .administrateur(superAdmin)
+                                .administrateur(adminSophie)
                                 .instructeur(instMarie)
                                 .categorie(gestionCat)
                                 .titre("Gestion de Projet Agile")
@@ -249,6 +273,10 @@ public class DataSeeder implements CommandLineRunner {
                                 .statut(CourseStatus.PUBLIE)
                                 .datePublication(LocalDateTime.now().minusDays(10))
                                 .nombreVues(3400L)
+                                .metaTitle("Gestion de Projet Agile : Maîtrisez Scrum")
+                                .metaDescription(
+                                                "Apprenez les méthodologies agiles, Scrum et comment gérer des sprints efficacement.")
+                                .url("https://moodle.portal.com/course/agile")
                                 .build();
                 coursRepository.save(coursGestion);
                 createMediaWithExternalUrl(coursGestion,
@@ -257,7 +285,7 @@ public class DataSeeder implements CommandLineRunner {
 
                 // Cours 3: Data Science (PUBLIE)
                 Cours coursData = Cours.builder()
-                                .administrateur(adminJohn)
+                                .administrateur(adminMarie)
                                 .instructeur(instMarie)
                                 .categorie(dataCat)
                                 .titre("Introduction à la Data Science")
@@ -276,6 +304,10 @@ public class DataSeeder implements CommandLineRunner {
                                 .statut(CourseStatus.PUBLIE)
                                 .datePublication(LocalDateTime.now().minusDays(5))
                                 .nombreVues(890L)
+                                .metaTitle("Introduction à la Data Science avec Python")
+                                .metaDescription(
+                                                "Un cours complet pour débuter en data science : analyse de données et visualisation.")
+                                .url("https://moodle.portal.com/course/data-science")
                                 .build();
                 coursRepository.save(coursData);
                 createMediaWithExternalUrl(coursData,
@@ -303,6 +335,10 @@ public class DataSeeder implements CommandLineRunner {
                                 .statut(CourseStatus.PUBLIE)
                                 .datePublication(LocalDateTime.now().minusDays(15))
                                 .nombreVues(2150L)
+                                .metaTitle("Préparation AWS Cloud Practitioner Certification")
+                                .metaDescription(
+                                                "Réussissez votre examen AWS CLF-C01 avec notre formation complète sur le cloud AWS.")
+                                .url("https://moodle.portal.com/course/aws-cloud")
                                 .build();
                 coursRepository.save(coursAws);
                 createMediaWithExternalUrl(coursAws,
@@ -330,6 +366,10 @@ public class DataSeeder implements CommandLineRunner {
                                 .statut(CourseStatus.PUBLIE)
                                 .datePublication(LocalDateTime.now().minusDays(20))
                                 .nombreVues(1890L)
+                                .metaTitle("Masterclass UI/UX Design : Devenez Designer")
+                                .metaDescription(
+                                                "Apprenez les principes du design, Figma et comment créer des interfaces exceptionnelles.")
+                                .url("https://moodle.portal.com/course/ui-ux-design")
                                 .build();
                 coursRepository.save(coursDesign);
                 createMediaWithExternalUrl(coursDesign,
@@ -357,6 +397,10 @@ public class DataSeeder implements CommandLineRunner {
                                 .statut(CourseStatus.ARCHIVE)
                                 .datePublication(LocalDateTime.now().minusMonths(6))
                                 .nombreVues(4520L)
+                                .metaTitle("Hacking Éthique et Pentesting : Niveau Avancé")
+                                .metaDescription(
+                                                "Apprenez la sécurité offensive, Kali Linux et les techniques d'audit de sécurité.")
+                                .url("https://moodle.portal.com/course/hacking-ethique")
                                 .build();
                 coursRepository.save(coursHacking);
                 createMediaWithExternalUrl(coursHacking,
@@ -365,7 +409,7 @@ public class DataSeeder implements CommandLineRunner {
 
                 // Cours 7: React.js Moderne (PUBLIE)
                 Cours coursReact = Cours.builder()
-                                .administrateur(adminJohn)
+                                .administrateur(adminSophie)
                                 .instructeur(instProf)
                                 .categorie(webCat)
                                 .titre("React.js Moderne avec Hooks")
@@ -384,6 +428,10 @@ public class DataSeeder implements CommandLineRunner {
                                 .statut(CourseStatus.PUBLIE)
                                 .datePublication(LocalDateTime.now().minusDays(7))
                                 .nombreVues(2890L)
+                                .metaTitle("React.js Moderne : Hooks, Context API et Redux")
+                                .metaDescription(
+                                                "Maîtrisez le développement frontend avec React.js et les dernières fonctionnalités de React 18.")
+                                .url("https://moodle.portal.com/course/react-moderne")
                                 .build();
                 coursRepository.save(coursReact);
                 createMediaWithExternalUrl(coursReact,
@@ -410,6 +458,10 @@ public class DataSeeder implements CommandLineRunner {
                                 .estCertifiant(true)
                                 .statut(CourseStatus.BROUILLON)
                                 .nombreVues(0L)
+                                .metaTitle("Machine Learning Avancé et Deep Learning")
+                                .metaDescription(
+                                                "Plongez dans les réseaux de neurones, CNN, RNN et les architectures Transformers.")
+                                .url("https://moodle.portal.com/course/machine-learning-avance")
                                 .build();
                 coursRepository.save(coursML);
                 createMediaWithExternalUrl(coursML,
@@ -438,6 +490,10 @@ public class DataSeeder implements CommandLineRunner {
                                 .statut(CourseStatus.PUBLIE)
                                 .datePublication(LocalDateTime.now().minusDays(25))
                                 .nombreVues(1670L)
+                                .metaTitle("DevOps & CI/CD : Automatisation Totale")
+                                .metaDescription(
+                                                "Apprenez Kubernetes, Docker et comment mettre en place des pipelines CI/CD robustes.")
+                                .url("https://moodle.portal.com/course/devops-cicd")
                                 .build();
                 coursRepository.save(coursDevops);
                 createMediaWithExternalUrl(coursDevops,
@@ -446,7 +502,7 @@ public class DataSeeder implements CommandLineRunner {
 
                 // Cours 10: Python pour Débutants (ARCHIVE)
                 Cours coursPython = Cours.builder()
-                                .administrateur(adminJohn)
+                                .administrateur(adminMarie)
                                 .instructeur(instProf)
                                 .categorie(devCat)
                                 .titre("Python pour Débutants")
@@ -464,6 +520,10 @@ public class DataSeeder implements CommandLineRunner {
                                 .statut(CourseStatus.ARCHIVE)
                                 .datePublication(LocalDateTime.now().minusMonths(8))
                                 .nombreVues(8900L)
+                                .metaTitle("Python pour Débutants : Guide Complet")
+                                .metaDescription(
+                                                "Apprenez la programmation à partir de zéro avec le langage le plus populaire au monde.")
+                                .url("https://moodle.portal.com/course/python-debutants")
                                 .build();
                 coursRepository.save(coursPython);
                 createMediaWithExternalUrl(coursPython,
@@ -474,7 +534,7 @@ public class DataSeeder implements CommandLineRunner {
 
                 // Cours 11: C++ Avancé (Développement)
                 Cours coursCpp = Cours.builder()
-                                .administrateur(adminJohn)
+                                .administrateur(adminSophie)
                                 .instructeur(instProf)
                                 .categorie(devCat)
                                 .titre("C++ Avancé et Programmation Système")
@@ -494,6 +554,10 @@ public class DataSeeder implements CommandLineRunner {
                                 .statut(CourseStatus.PUBLIE)
                                 .datePublication(LocalDateTime.now().minusDays(12))
                                 .nombreVues(1100L)
+                                .metaTitle("C++ Avancé et Programmation Système Bas Niveau")
+                                .metaDescription(
+                                                "Maîtrisez la gestion mémoire, la STL et les templates pour le développement système.")
+                                .url("https://moodle.portal.com/course/cpp-avance")
                                 .build();
                 coursRepository.save(coursCpp);
                 createMediaWithExternalUrl(coursCpp,
@@ -521,6 +585,10 @@ public class DataSeeder implements CommandLineRunner {
                                 .statut(CourseStatus.PUBLIE)
                                 .datePublication(LocalDateTime.now().minusDays(3))
                                 .nombreVues(750L)
+                                .metaTitle("Sécurité des Réseaux, Firewalls et VPN")
+                                .metaDescription(
+                                                "Apprenez à sécuriser les infrastructures réseaux critiques contre les intrusions.")
+                                .url("https://moodle.portal.com/course/securite-reseaux")
                                 .build();
                 coursRepository.save(coursSecu);
                 createMediaWithExternalUrl(coursSecu,
@@ -529,7 +597,7 @@ public class DataSeeder implements CommandLineRunner {
 
                 // Cours 13: Angular Masterclass (Web)
                 Cours coursAngular = Cours.builder()
-                                .administrateur(adminJohn)
+                                .administrateur(adminMarie)
                                 .instructeur(instProf)
                                 .categorie(webCat)
                                 .titre("Angular : Le Guide Complet")
@@ -547,6 +615,10 @@ public class DataSeeder implements CommandLineRunner {
                                 .statut(CourseStatus.PUBLIE)
                                 .datePublication(LocalDateTime.now().minusDays(18))
                                 .nombreVues(1950L)
+                                .metaTitle("Angular : Le Guide Complet (v17+)")
+                                .metaDescription(
+                                                "Développement d'applications d'entreprise avec Angular, RxJS et NgRx.")
+                                .url("https://moodle.portal.com/course/angular-complet")
                                 .build();
                 coursRepository.save(coursAngular);
                 createMediaWithExternalUrl(coursAngular,
@@ -573,6 +645,10 @@ public class DataSeeder implements CommandLineRunner {
                                 .statut(CourseStatus.PUBLIE)
                                 .datePublication(LocalDateTime.now().minusDays(22))
                                 .nombreVues(1300L)
+                                .metaTitle("Big Data Analytics avec Apache Spark et Hadoop")
+                                .metaDescription(
+                                                "Apprenez à traiter massivement les données avec Spark SQL et Spark Streaming.")
+                                .url("https://moodle.portal.com/course/big-data-spark")
                                 .build();
                 coursRepository.save(coursBigData);
                 createMediaWithExternalUrl(coursBigData,
@@ -599,6 +675,10 @@ public class DataSeeder implements CommandLineRunner {
                                 .statut(CourseStatus.PUBLIE)
                                 .datePublication(LocalDateTime.now().minusDays(9))
                                 .nombreVues(980L)
+                                .metaTitle("Google Cloud Platform (GCP) Professional Architect")
+                                .metaDescription(
+                                                "Certification Google Cloud : GCE, GKE, BigQuery et architecture cloud.")
+                                .url("https://moodle.portal.com/course/gcp-architect")
                                 .build();
                 coursRepository.save(coursGcp);
                 createMediaWithExternalUrl(coursGcp,
@@ -625,6 +705,10 @@ public class DataSeeder implements CommandLineRunner {
                                 .statut(CourseStatus.PUBLIE)
                                 .datePublication(LocalDateTime.now().minusDays(14))
                                 .nombreVues(2400L)
+                                .metaTitle("Créer un Design System Évolutif")
+                                .metaDescription(
+                                                "Méthodologie pour construire des librairies de composants cohérentes et documentées.")
+                                .url("https://moodle.portal.com/course/design-system")
                                 .build();
                 coursRepository.save(coursDesignSystem);
                 createMediaWithExternalUrl(coursDesignSystem,
@@ -706,6 +790,7 @@ public class DataSeeder implements CommandLineRunner {
                                         .telephone("+237 6" + (10000000 + i))
                                         .filiere("Génie Informatique")
                                         .niveau("Niveau " + (3 + random.nextInt(3)))
+                                        .passwordHash(PasswordUtil.hashPassword("student" + i))
                                         .build();
 
                         // Inscrire à 1 à 8 cours aléatoires

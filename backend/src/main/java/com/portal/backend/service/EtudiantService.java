@@ -84,6 +84,11 @@ public class EtudiantService {
                 Cours cours = coursRepository.findById(coursId)
                                 .orElseThrow(() -> new RuntimeException("Cours not found"));
 
+                // Check if already enrolled to avoid duplicate key exception
+                if (etudiant.getCoursSuivis().contains(cours)) {
+                        return; // or throw a custom exception if preferred
+                }
+
                 etudiant.getCoursSuivis().add(cours);
                 etudiantRepository.save(etudiant);
 

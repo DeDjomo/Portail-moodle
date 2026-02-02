@@ -55,6 +55,7 @@ public class CoursService {
                 .estCertifiant(request.estCertifiant() != null ? request.estCertifiant() : false)
                 .metaTitle(request.metaTitle())
                 .metaDescription(request.metaDescription())
+                .url(request.url())
                 .statut(CourseStatus.BROUILLON)
                 .build();
 
@@ -98,6 +99,7 @@ public class CoursService {
             cours.setEstCertifiant(request.estCertifiant());
         cours.setMetaTitle(request.metaTitle());
         cours.setMetaDescription(request.metaDescription());
+        cours.setUrl(request.url());
 
         return mapToDto(coursRepository.save(cours));
     }
